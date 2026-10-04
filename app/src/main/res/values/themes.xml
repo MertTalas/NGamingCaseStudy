@@ -1,8 +1,29 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
+    <!-- Base application theme. Colors come from design/tokens.json; light and dark values
+         are resolved through values/colors.xml and values-night/colors.xml.
+         Tokens without a Material role (topBar, accent, delete, placeholder, keyboard...)
+         are referenced directly as @color/<name>. -->
     <style name="Base.Theme.NGamingCaseStudy" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Color -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorOnBackground">@color/on_background</item>
+        <item name="colorSurface">@color/background</item>
+        <item name="colorOnSurface">@color/on_background</item>
+        <item name="colorSurfaceVariant">@color/surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant</item>
+        <item name="colorOutline">@color/outline</item>
+        <item name="colorOutlineVariant">@color/outline</item>
+        <item name="colorError">@color/error</item>
+
+        <!-- Typography -->
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.NGaming.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.NGaming.TitleItem</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.NGaming.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.NGaming.BodyItem</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.NGaming.Label</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.NGaming.Button</item>
     </style>
 
     <style name="Theme.NGamingCaseStudy" parent="Base.Theme.NGamingCaseStudy" />

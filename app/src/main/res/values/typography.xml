@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Type scale from the Figma "Foundations" page. Montserrat for display, Inter for text.
+     Each style points at a single static font file so the weight is exact on every API level. -->
+<resources>
+
+    <!-- TopBar/Title: Montserrat Bold 20/28 -->
+    <style name="TextAppearance.NGaming.TopBarTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/montserrat_bold</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="lineHeight">28sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <!-- Title/Large: Montserrat SemiBold 20/28 -->
+    <style name="TextAppearance.NGaming.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/montserrat_semibold</item>
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="lineHeight">28sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <!-- Title/Item: Montserrat SemiBold 16/22 -->
+    <style name="TextAppearance.NGaming.TitleItem" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/montserrat_semibold</item>
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="lineHeight">22sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <!-- Body/Large: Inter Regular 16/24 -->
+    <style name="TextAppearance.NGaming.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">@font/inter_regular</item>
+        <item name="android:fontFamily">@font/inter_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="lineHeight">24sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <!-- Body/Item: Inter Regular 14/20 -->
+    <style name="TextAppearance.NGaming.BodyItem" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/inter_regular</item>
+        <item name="android:fontFamily">@font/inter_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="lineHeight">20sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <!-- Label: Inter Medium 12/16 -->
+    <style name="TextAppearance.NGaming.Label" parent="TextAppearance.Material3.LabelMedium">
+        <item name="fontFamily">@font/inter_medium</item>
+        <item name="android:fontFamily">@font/inter_medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="lineHeight">16sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <!-- Button: Montserrat SemiBold 14/20, all caps -->
+    <style name="TextAppearance.NGaming.Button" parent="TextAppearance.Material3.LabelLarge">
+        <item name="fontFamily">@font/montserrat_semibold</item>
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="lineHeight">20sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+</resources>
