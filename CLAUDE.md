@@ -41,6 +41,7 @@ com.mert.ngamingcasestudy
 - Source of truth: Figma file "NGAMING Listing App" (https://www.figma.com/design/sTouKV3dCMyiDo1Z3vZtOi). Pages: Foundations (colors, typography, shape, icons) and Screens (list, swipe to delete, detail, detail with keyboard, loading, error, empty; each in light and dark).
 - Before building or changing a screen, read the matching frame from Figma (Figma MCP) and follow it for layout, spacing, typography and states. If the design and these notes disagree, the design wins.
 - Colors are design tokens defined in `design/tokens.json` (semantic names, each with a light and a dark value). Android color resources are generated from it, see the `design-tokens` skill. Never hardcode hex values in layouts or code, and never edit the generated color files by hand.
+- Typography is defined by hand in `res/values/typography.xml` (`TextAppearance.NGaming.*`, Montserrat + Inter bundled in `res/font`). Use these styles or the theme `textAppearance*` attributes instead of setting fonts or text sizes inline.
 
 ## Conventions
 

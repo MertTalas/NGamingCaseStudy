@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated from design/tokens.json by tools/generate_colors.py. Do not edit. -->
+<resources>
+    <color name="accent">#FFD100</color>
+    <color name="background">#121212</color>
+    <color name="delete">#D93025</color>
+    <color name="error">#F28B82</color>
+    <color name="keyboard">#2B2B2B</color>
+    <color name="keyboard_key">#474747</color>
+    <color name="on_background">#F2F2F2</color>
+    <color name="on_delete">#FFFFFF</color>
+    <color name="on_primary">#111111</color>
+    <color name="on_surface_variant">#A8A8A8</color>
+    <color name="on_top_bar">#FFD100</color>
+    <color name="outline">#2E2E2E</color>
+    <color name="placeholder">#333333</color>
+    <color name="primary">#FFD100</color>
+    <color name="surface_variant">#2A2A2A</color>
+    <color name="top_bar">#1A1A1A</color>
+</resources>
