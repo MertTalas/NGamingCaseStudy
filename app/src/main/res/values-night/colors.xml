@@ -18,6 +18,7 @@
     <color name="outline">#2E2E2E</color>
     <color name="placeholder">#333333</color>
     <color name="primary">#FFD100</color>
+    <color name="shimmer_highlight">#474747</color>
     <color name="surface_variant">#2A2A2A</color>
     <color name="top_bar">#1A1A1A</color>
 </resources>
