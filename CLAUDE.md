@@ -51,8 +51,8 @@ com.mert.ngamingcasestudy
 ## Conventions
 
 - Prefer small, focused classes and functions. No business logic in Fragments or adapters.
-- Use `viewLifecycleOwner` with `repeatOnLifecycle` when collecting flows in Fragments.
-- Clear ViewBinding references in `onDestroyView`.
+- Fragments extend `BaseFragment<XBinding>(R.layout.x, XBinding::bind)` (`ui/common`) and collect flows with its `collectWithLifecycle` (`viewLifecycleOwner` + `repeatOnLifecycle`).
+- `BaseFragment.binding` comes from the `viewBinding` delegate, which clears it when the view is destroyed. Do not use plain `by lazy` for bindings in Fragments.
 - Colors come from theme attributes or `colors.xml` / `values-night/colors.xml`. No hardcoded colors in layouts.
 - Commits are small and use imperative, descriptive messages.
 
