@@ -9,4 +9,7 @@
 
     <dimen name="post_avatar_size">56dp</dimen>
     <dimen name="divider_thickness">1dp</dimen>
+
+    <dimen name="swipe_action_width">128dp</dimen>
+    <dimen name="swipe_action_icon_size">24dp</dimen>
 </resources>

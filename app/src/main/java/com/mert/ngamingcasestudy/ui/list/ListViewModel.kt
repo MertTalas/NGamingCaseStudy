@@ -2,6 +2,7 @@ package com.mert.ngamingcasestudy.ui.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mert.ngamingcasestudy.domain.model.Post
 import com.mert.ngamingcasestudy.domain.usecase.DeletePostUseCase
 import com.mert.ngamingcasestudy.domain.usecase.LoadPostsUseCase
 import com.mert.ngamingcasestudy.domain.usecase.ObservePostsUseCase
@@ -39,7 +40,7 @@ class ListViewModel @Inject constructor(
 
     fun onRetry() = load()
 
-    fun onPostSwiped(postId: Int) = deletePost(postId)
+    fun onPostDeleted(post: Post) = deletePost(post.id)
 
     private fun load() {
         viewModelScope.launch {

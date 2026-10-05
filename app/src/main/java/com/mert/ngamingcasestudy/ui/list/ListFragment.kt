@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.mert.ngamingcasestudy.R
 import com.mert.ngamingcasestudy.databinding.FragmentListBinding
@@ -23,7 +24,10 @@ class ListFragment : BaseFragment<FragmentListBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = PostAdapter(onPostClick = ::openDetail)
+        val adapter = PostAdapter(
+            onPostClick = ::openDetail,
+            onPostDelete = viewModel::onPostDeleted,
+        )
 
         setupTopBar()
         setupList(adapter)
@@ -45,6 +49,7 @@ class ListFragment : BaseFragment<FragmentListBinding>(
                 dividerColor = context.getColor(R.color.outline)
             }
         )
+        ItemTouchHelper(PostSwipeCallback(onPostSwiped = viewModel::onPostDeleted)).attachToRecyclerView(this)
         applySystemBarInsetsAsPadding(bottom = true)
     }
 
