@@ -4,6 +4,7 @@
     <string name="list_title">Posts</string>
     <string name="list_error">Posts could not be loaded.</string>
     <string name="list_retry">Retry</string>
+    <string name="list_loading">Loading posts</string>
     <string name="list_empty">No posts yet.</string>
     <string name="post_delete">Delete</string>
     <string name="post_deleted">Post deleted</string>

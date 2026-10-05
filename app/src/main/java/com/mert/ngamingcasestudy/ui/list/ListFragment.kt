@@ -57,7 +57,7 @@ class ListFragment : BaseFragment<FragmentListBinding>(
     }
 
     private fun render(state: ListUiState, adapter: PostAdapter) = with(binding) {
-        progress.isVisible = state is ListUiState.Loading
+        loadingSkeleton.isVisible = state is ListUiState.Loading
         errorGroup.isVisible = state is ListUiState.Error
         postList.isVisible = state is ListUiState.Success
         emptyText.isVisible = state is ListUiState.Success && state.posts.isEmpty()

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="skeleton_title_widths">
+        <item>200dp</item>
+        <item>140dp</item>
+        <item>220dp</item>
+        <item>120dp</item>
+        <item>180dp</item>
+        <item>160dp</item>
+        <item>200dp</item>
+    </array>
+    <array name="skeleton_first_line_widths">
+        <item>260dp</item>
+        <item>250dp</item>
+        <item>240dp</item>
+        <item>262dp</item>
+        <item>230dp</item>
+        <item>255dp</item>
+        <item>245dp</item>
+    </array>
+    <array name="skeleton_second_line_widths">
+        <item>180dp</item>
+        <item>210dp</item>
+        <item>160dp</item>
+        <item>200dp</item>
+        <item>190dp</item>
+        <item>170dp</item>
+        <item>150dp</item>
+    </array>
+    <integer name="skeleton_row_count">12</integer>
+    <integer name="shimmer_duration_ms">1200</integer>
+</resources>

@@ -12,4 +12,9 @@
 
     <dimen name="swipe_action_width">128dp</dimen>
     <dimen name="swipe_action_icon_size">24dp</dimen>
+
+    <dimen name="skeleton_title_height">16dp</dimen>
+    <dimen name="skeleton_line_height">12dp</dimen>
+    <dimen name="skeleton_line_spacing">10dp</dimen>
+    <dimen name="skeleton_bar_radius">4dp</dimen>
 </resources>
