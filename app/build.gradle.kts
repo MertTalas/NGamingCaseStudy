@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
+    implementation(libs.androidx.splashscreen)
 
     // DI
     implementation(libs.hilt.android)

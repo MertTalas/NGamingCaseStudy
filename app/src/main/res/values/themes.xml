@@ -36,4 +36,11 @@
     </style>
 
     <style name="Theme.NGamingCaseStudy" parent="Base.Theme.NGamingCaseStudy" />
+
+    <style name="Theme.NGamingCaseStudy.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/top_bar</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.NGamingCaseStudy</item>
+        <item name="android:windowLightStatusBar">@bool/is_light_theme</item>
+    </style>
 </resources>

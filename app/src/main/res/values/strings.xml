@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NGamingCaseStudy</string>
+    <string name="app_name">NPosts</string>
 
     <string name="list_title">Posts</string>
     <string name="list_error">Posts could not be loaded.</string>
