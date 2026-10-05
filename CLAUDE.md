@@ -23,8 +23,12 @@ Single Activity with two Fragments (list, detail). Unidirectional data flow: UI 
 com.mert.ngamingcasestudy
 ├── data
 │   ├── remote       Retrofit service and DTOs
-│   └── repository   PostRepository (single source of truth)
-├── domain.model     Post
+│   ├── mapper       DTO -> domain mapping
+│   └── repository   PostRepositoryImpl (single source of truth)
+├── domain
+│   ├── model        Post
+│   ├── repository   PostRepository interface
+│   └── usecase      One use case per action, used by ViewModels
 ├── di               Hilt modules
 └── ui
     ├── list         ListFragment, ListViewModel, PostAdapter
@@ -33,6 +37,7 @@ com.mert.ngamingcasestudy
 
 - The repository loads posts from the API once and keeps them in an in-memory `StateFlow<List<Post>>`.
 - jsonplaceholder does not persist writes, so edit and delete are applied locally. List and detail screens share the same repository, so changes show up in the list immediately.
+- Clean architecture dependency rule: `ui -> domain <- data`. Domain has no Android, Retrofit or data imports; ViewModels depend only on use cases.
 - DTOs are mapped to a `Post` domain model so the UI does not depend on the API shape.
 - UI state is modeled as Loading / Success / Error.
 
