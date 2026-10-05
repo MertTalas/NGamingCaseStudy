@@ -16,6 +16,9 @@
         <item name="colorOutline">@color/outline</item>
         <item name="colorOutlineVariant">@color/outline</item>
         <item name="colorError">@color/error</item>
+        <item name="colorSurfaceInverse">@color/inverse_surface</item>
+        <item name="colorOnSurfaceInverse">@color/on_inverse_surface</item>
+        <item name="colorPrimaryInverse">@color/inverse_primary</item>
 
         <!-- Typography -->
         <item name="textAppearanceTitleLarge">@style/TextAppearance.NGaming.TitleLarge</item>
@@ -24,6 +27,12 @@
         <item name="textAppearanceBodyMedium">@style/TextAppearance.NGaming.BodyItem</item>
         <item name="textAppearanceLabelMedium">@style/TextAppearance.NGaming.Label</item>
         <item name="textAppearanceLabelLarge">@style/TextAppearance.NGaming.Button</item>
+
+        <item name="snackbarStyle">@style/Widget.NGaming.Snackbar</item>
+    </style>
+
+    <style name="Widget.NGaming.Snackbar" parent="Widget.Material3.Snackbar">
+        <item name="android:layout_margin">@dimen/spacing_md</item>
     </style>
 
     <style name="Theme.NGamingCaseStudy" parent="Base.Theme.NGamingCaseStudy" />

@@ -4,8 +4,8 @@ import com.mert.ngamingcasestudy.domain.model.DeletedPost
 import com.mert.ngamingcasestudy.domain.repository.PostRepository
 import javax.inject.Inject
 
-class DeletePostUseCase @Inject constructor(
+class RestorePostUseCase @Inject constructor(
     private val repository: PostRepository,
 ) {
-    operator fun invoke(id: Int): DeletedPost? = repository.deletePost(id)
+    operator fun invoke(deletedPost: DeletedPost) = repository.restorePost(deletedPost)
 }

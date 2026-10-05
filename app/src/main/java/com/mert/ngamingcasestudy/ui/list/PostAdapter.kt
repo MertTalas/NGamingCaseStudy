@@ -42,6 +42,8 @@ class PostAdapter(
 
         val foreground: View get() = binding.foreground
 
+        val deleteBackground: View get() = binding.deleteBackground
+
         init {
             binding.foreground.setOnClickListener { boundPost?.let(onPostClick) }
             ViewCompat.addAccessibilityAction(

@@ -6,4 +6,6 @@
     <string name="list_retry">Retry</string>
     <string name="list_empty">No posts yet.</string>
     <string name="post_delete">Delete</string>
+    <string name="post_deleted">Post deleted</string>
+    <string name="post_undo">Undo</string>
 </resources>

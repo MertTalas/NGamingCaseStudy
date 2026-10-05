@@ -52,6 +52,8 @@ Tokens with a Material 3 role are wired once in `values/themes.xml`. There is no
 | `surfaceVariant` / `onSurfaceVariant` | `colorSurfaceVariant` / `colorOnSurfaceVariant` |
 | `outline` | `colorOutline`, `colorOutlineVariant` |
 | `error` | `colorError` |
+| `inverseSurface` / `onInverseSurface` | `colorSurfaceInverse` / `colorOnSurfaceInverse` |
+| `inversePrimary` | `colorPrimaryInverse` |
 
 The other tokens have no Material role and are used directly as `@color/<name>`: `topBar`, `onTopBar`, `accent`, `delete`, `onDelete`, `placeholder`, `keyboard`, `keyboardKey`.
 

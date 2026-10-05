@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.android.material.snackbar.Snackbar
 import com.mert.ngamingcasestudy.R
 import com.mert.ngamingcasestudy.databinding.FragmentListBinding
 import com.mert.ngamingcasestudy.domain.model.Post
@@ -34,6 +35,7 @@ class ListFragment : BaseFragment<FragmentListBinding>(
         binding.retryButton.setOnClickListener { viewModel.onRetry() }
 
         viewModel.uiState.collectWithLifecycle { render(it, adapter) }
+        viewModel.events.collectWithLifecycle { handleEvent(it) }
     }
 
     private fun setupTopBar() = with(binding.topBar) {
@@ -43,6 +45,7 @@ class ListFragment : BaseFragment<FragmentListBinding>(
 
     private fun setupList(adapter: PostAdapter) = with(binding.postList) {
         this.adapter = adapter
+        setHasFixedSize(true)
         addItemDecoration(
             MaterialDividerItemDecoration(context, MaterialDividerItemDecoration.VERTICAL).apply {
                 dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
@@ -59,6 +62,16 @@ class ListFragment : BaseFragment<FragmentListBinding>(
         postList.isVisible = state is ListUiState.Success
         emptyText.isVisible = state is ListUiState.Success && state.posts.isEmpty()
         if (state is ListUiState.Success) adapter.submitList(state.posts)
+    }
+
+    private fun handleEvent(event: ListEvent) = when (event) {
+        ListEvent.ShowUndoDelete -> showUndoDelete()
+    }
+
+    private fun showUndoDelete() {
+        Snackbar.make(binding.root, R.string.post_deleted, Snackbar.LENGTH_LONG)
+            .setAction(R.string.post_undo) { viewModel.onUndoDelete() }
+            .show()
     }
 
     private fun openDetail(post: Post) {

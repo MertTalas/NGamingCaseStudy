@@ -1,6 +1,7 @@
 package com.mert.ngamingcasestudy.ui.list
 
 import android.graphics.Canvas
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.mert.ngamingcasestudy.domain.model.Post
@@ -32,10 +33,9 @@ class PostSwipeCallback(
         actionState: Int,
         isCurrentlyActive: Boolean,
     ) {
-        getDefaultUIUtil().onDraw(
-            c, recyclerView, viewHolder.asPostViewHolder().foreground,
-            dX, dY, actionState, isCurrentlyActive,
-        )
+        val holder = viewHolder.asPostViewHolder()
+        holder.deleteBackground.isVisible = dX != 0f
+        getDefaultUIUtil().onDraw(c, recyclerView, holder.foreground, dX, dY, actionState, isCurrentlyActive)
     }
 
     override fun onChildDrawOver(
@@ -52,7 +52,9 @@ class PostSwipeCallback(
     }
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
-        getDefaultUIUtil().clearView(viewHolder.asPostViewHolder().foreground)
+        val holder = viewHolder.asPostViewHolder()
+        holder.deleteBackground.isVisible = false
+        getDefaultUIUtil().clearView(holder.foreground)
     }
 
     private fun RecyclerView.ViewHolder.asPostViewHolder() = this as PostAdapter.PostViewHolder

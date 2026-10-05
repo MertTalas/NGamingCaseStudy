@@ -1,5 +1,6 @@
 package com.mert.ngamingcasestudy.domain.repository
 
+import com.mert.ngamingcasestudy.domain.model.DeletedPost
 import com.mert.ngamingcasestudy.domain.model.Post
 import kotlinx.coroutines.flow.Flow
 
@@ -13,5 +14,7 @@ interface PostRepository {
 
     fun updatePost(id: Int, title: String, body: String)
 
-    fun deletePost(id: Int)
+    fun deletePost(id: Int): DeletedPost?
+
+    fun restorePost(deletedPost: DeletedPost)
 }
