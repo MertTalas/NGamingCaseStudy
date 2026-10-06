@@ -5,6 +5,7 @@
     <dimen name="spacing_sm_plus">14dp</dimen>
     <dimen name="spacing_md">16dp</dimen>
     <dimen name="spacing_lg">24dp</dimen>
+    <dimen name="spacing_xl">32dp</dimen>
 
     <dimen name="corner_radius_md">8dp</dimen>
 
@@ -23,6 +24,10 @@
     <dimen name="button_height">48dp</dimen>
     <dimen name="button_icon_size">18dp</dimen>
     <dimen name="button_icon_padding">8dp</dimen>
+
+    <dimen name="error_icon_container_size">96dp</dimen>
+    <dimen name="error_icon_padding">24dp</dimen>
+    <dimen name="error_action_spacing">40dp</dimen>
 
     <dimen name="swipe_action_width">128dp</dimen>
     <dimen name="swipe_action_icon_size">24dp</dimen>

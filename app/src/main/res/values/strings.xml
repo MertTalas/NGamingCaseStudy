@@ -2,8 +2,9 @@
     <string name="app_name">NPosts</string>
 
     <string name="list_title">Posts</string>
-    <string name="list_error">Posts could not be loaded.</string>
-    <string name="list_retry">Retry</string>
+    <string name="list_error_title">Something went wrong</string>
+    <string name="list_error_message">We couldn\'t load the posts. Check your connection and try again.</string>
+    <string name="list_retry">Try again</string>
     <string name="list_loading">Loading posts</string>
     <string name="list_empty">No posts yet.</string>
     <string name="post_delete">Delete</string>

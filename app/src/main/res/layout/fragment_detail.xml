@@ -78,6 +78,8 @@
                 <EditText
                     android:id="@+id/title_input"
                     style="@style/Widget.NGaming.Input"
+                    android:paddingHorizontal="@dimen/spacing_md"
+                    android:paddingVertical="@dimen/spacing_sm_plus"
                     android:imeOptions="actionNext"
                     android:importantForAutofill="no"
                     android:inputType="textCapSentences"
@@ -93,6 +95,8 @@
                 <EditText
                     android:id="@+id/body_input"
                     style="@style/Widget.NGaming.Input"
+                    android:paddingHorizontal="@dimen/spacing_md"
+                    android:paddingVertical="@dimen/spacing_sm_plus"
                     android:layout_marginBottom="@dimen/spacing_md"
                     android:importantForAutofill="no"
                     android:inputType="textCapSentences|textMultiLine"
@@ -121,17 +125,10 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/save_button"
+            style="@style/Widget.NGaming.Button"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
             android:enabled="false"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
             android:text="@string/detail_save"
-            android:textAllCaps="false"
-            app:cornerRadius="@dimen/corner_radius_md"
-            app:icon="@drawable/ic_check"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/button_icon_padding"
-            app:iconSize="@dimen/button_icon_size" />
+            app:icon="@drawable/ic_check" />
     </FrameLayout>
 </LinearLayout>

@@ -44,22 +44,43 @@
             android:layout_gravity="center"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="@dimen/spacing_md"
+            android:paddingHorizontal="@dimen/spacing_xl"
             android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/error_icon_container_size"
+                android:layout_height="@dimen/error_icon_container_size"
+                android:background="@drawable/bg_error_icon"
+                android:importantForAccessibility="no"
+                android:padding="@dimen/error_icon_padding"
+                android:src="@drawable/ic_cloud_off" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/list_error"
-                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:gravity="center"
+                android:text="@string/list_error_title"
+                android:textAppearance="@style/TextAppearance.NGaming.TitleLarge"
                 android:textColor="?attr/colorOnBackground" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/retry_button"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_md"
-                android:text="@string/list_retry" />
+                android:gravity="center"
+                android:text="@string/list_error_message"
+                android:textAppearance="@style/TextAppearance.NGaming.BodyItem"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/retry_button"
+                style="@style/Widget.NGaming.Button"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/error_action_spacing"
+                android:paddingHorizontal="@dimen/spacing_lg"
+                android:text="@string/list_retry"
+                app:icon="@drawable/ic_refresh" />
         </LinearLayout>
 
         <TextView
