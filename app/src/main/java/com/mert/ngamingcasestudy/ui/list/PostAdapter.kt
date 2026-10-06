@@ -16,12 +16,11 @@ import coil3.transform.CircleCropTransformation
 import com.mert.ngamingcasestudy.R
 import com.mert.ngamingcasestudy.databinding.ItemPostBinding
 import com.mert.ngamingcasestudy.domain.model.Post
-import com.mert.ngamingcasestudy.ui.common.postImageUrl
 
 class PostAdapter(
-    private val onPostClick: (Post, Int) -> Unit,
+    private val onPostClick: (PostListItem) -> Unit,
     private val onPostDelete: (Post) -> Unit,
-) : ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffCallback) {
+) : ListAdapter<PostListItem, PostAdapter.PostViewHolder>(PostDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = ItemPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -29,28 +28,25 @@ class PostAdapter(
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        holder.bind(getItem(position), postImageUrl(position))
+        holder.bind(getItem(position))
     }
 
     class PostViewHolder(
         private val binding: ItemPostBinding,
-        onPostClick: (Post, Int) -> Unit,
+        onPostClick: (PostListItem) -> Unit,
         onPostDelete: (Post) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        var boundPost: Post? = null
-            private set
+        private var boundItem: PostListItem? = null
+
+        val boundPost: Post? get() = boundItem?.post
 
         val foreground: View get() = binding.foreground
 
         val deleteBackground: View get() = binding.deleteBackground
 
         init {
-            binding.foreground.setOnClickListener {
-                val post = boundPost ?: return@setOnClickListener
-                val position = bindingAdapterPosition
-                if (position != RecyclerView.NO_POSITION) onPostClick(post, position)
-            }
+            binding.foreground.setOnClickListener { boundItem?.let(onPostClick) }
             ViewCompat.addAccessibilityAction(
                 binding.foreground,
                 binding.root.context.getString(R.string.post_delete),
@@ -60,11 +56,11 @@ class PostAdapter(
             }
         }
 
-        fun bind(post: Post, imageUrl: String) {
-            boundPost = post
-            binding.title.text = post.title
-            binding.body.text = post.body.replace('\n', ' ')
-            binding.avatar.load(imageUrl) {
+        fun bind(item: PostListItem) {
+            boundItem = item
+            binding.title.text = item.post.title
+            binding.body.text = item.post.body.replace('\n', ' ')
+            binding.avatar.load(item.imageUrl) {
                 crossfade(true)
                 placeholder(R.drawable.bg_avatar_placeholder)
                 error(R.drawable.bg_avatar_placeholder)
@@ -73,8 +69,8 @@ class PostAdapter(
         }
     }
 
-    private object PostDiffCallback : DiffUtil.ItemCallback<Post>() {
-        override fun areItemsTheSame(oldItem: Post, newItem: Post) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Post, newItem: Post) = oldItem == newItem
+    private object PostDiffCallback : DiffUtil.ItemCallback<PostListItem>() {
+        override fun areItemsTheSame(oldItem: PostListItem, newItem: PostListItem) = oldItem.post.id == newItem.post.id
+        override fun areContentsTheSame(oldItem: PostListItem, newItem: PostListItem) = oldItem == newItem
     }
 }
