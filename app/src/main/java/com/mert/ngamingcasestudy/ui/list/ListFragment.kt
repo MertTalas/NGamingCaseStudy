@@ -74,9 +74,9 @@ class ListFragment : BaseFragment<FragmentListBinding>(
             .show()
     }
 
-    private fun openDetail(post: Post) {
+    private fun openDetail(post: Post, imagePosition: Int) {
         val navController = findNavController()
         if (navController.currentDestination?.id != R.id.listFragment) return
-        navController.navigate(ListFragmentDirections.actionListToDetail(post.id))
+        navController.navigate(ListFragmentDirections.actionListToDetail(post.id, imagePosition))
     }
 }

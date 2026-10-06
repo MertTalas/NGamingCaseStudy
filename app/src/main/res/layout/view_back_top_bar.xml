@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/top_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/top_bar"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/spacing_xs"
+    android:paddingEnd="@dimen/spacing_md">
+
+    <ImageButton
+        android:id="@+id/top_bar_back"
+        android:layout_width="@dimen/top_bar_action_size"
+        android:layout_height="@dimen/top_bar_action_size"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/detail_back"
+        android:src="@drawable/ic_arrow_back" />
+
+    <TextView
+        android:id="@+id/top_bar_title"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/top_bar_height"
+        android:layout_marginStart="@dimen/spacing_xs"
+        android:layout_weight="1"
+        android:accessibilityHeading="true"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.NGaming.TopBarTitle"
+        android:textColor="@color/on_top_bar" />
+</LinearLayout>

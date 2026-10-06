@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.NGaming.InputLabel" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.NGaming.Label</item>
+        <item name="android:textColor">@color/input_label</item>
+    </style>
+
+    <style name="Widget.NGaming.Input" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/input_label_spacing</item>
+        <item name="android:background">@drawable/bg_input_field</item>
+        <item name="android:gravity">top|start</item>
+        <item name="android:paddingHorizontal">@dimen/spacing_md</item>
+        <item name="android:paddingVertical">@dimen/spacing_sm_plus</item>
+        <item name="android:textAppearance">@style/TextAppearance.NGaming.BodyLarge</item>
+        <item name="lineHeight">@dimen/input_line_height</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+        <item name="android:textCursorDrawable">@drawable/bg_input_cursor</item>
+    </style>
+</resources>
