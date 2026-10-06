@@ -71,7 +71,7 @@ class ListViewModelTest {
         viewModel.onRetry()
         runCurrent()
 
-        assertEquals(ListUiState.Success(posts, isRefreshing = false), viewModel.uiState.value)
+        assertEquals(ListUiState.Success(posts.asItems(), isRefreshing = false), viewModel.uiState.value)
     }
 
     @Test
@@ -94,7 +94,7 @@ class ListViewModelTest {
         viewModel.onRefresh()
         runCurrent()
 
-        assertEquals(ListUiState.Success(posts, isRefreshing = false), viewModel.uiState.value)
+        assertEquals(ListUiState.Success(posts.asItems(), isRefreshing = false), viewModel.uiState.value)
         assertEquals(1, repository.refreshCount)
     }
 
@@ -107,10 +107,10 @@ class ListViewModelTest {
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.events.collect(events::add) }
 
         viewModel.onRefresh()
-        assertEquals(ListUiState.Success(posts, isRefreshing = true), viewModel.uiState.value)
+        assertEquals(ListUiState.Success(posts.asItems(), isRefreshing = true), viewModel.uiState.value)
 
         advanceTimeBy(601)
-        assertEquals(ListUiState.Success(posts, isRefreshing = false), viewModel.uiState.value)
+        assertEquals(ListUiState.Success(posts.asItems(), isRefreshing = false), viewModel.uiState.value)
         assertEquals(listOf(ListEvent.ShowRefreshError), events)
     }
 
@@ -122,4 +122,56 @@ class ListViewModelTest {
 
         assertEquals(0, repository.refreshCount)
     }
+
+    @Test
+    fun `remaining posts keep their images after a delete`() = runTest {
+        val (first, second, third) = loadedThreePosts()
+        val viewModel = viewModel()
+
+        viewModel.onPostDeleted(first)
+
+        assertEquals(
+            listOf(PostListItem(second, imagePosition = 1), PostListItem(third, imagePosition = 2)),
+            viewModel.items(),
+        )
+    }
+
+    @Test
+    fun `undo puts the post back at its index with its image`() = runTest {
+        val threePosts = loadedThreePosts()
+        val viewModel = viewModel()
+
+        viewModel.onPostDeleted(threePosts[1])
+        viewModel.onUndoDelete()
+
+        assertEquals(threePosts.asItems(), viewModel.items())
+    }
+
+    @Test
+    fun `refresh assigns images by the new load order`() = runTest {
+        val (first, second, third) = loadedThreePosts()
+        val viewModel = viewModel()
+        viewModel.onPostDeleted(first)
+        repository.remotePosts = listOf(third, second)
+
+        viewModel.onRefresh()
+        runCurrent()
+
+        assertEquals(
+            listOf(PostListItem(third, imagePosition = 0), PostListItem(second, imagePosition = 1)),
+            viewModel.items(),
+        )
+    }
+
+    private fun loadedThreePosts(): List<Post> {
+        val threePosts = listOf(Post(1, "One", "Body"), Post(2, "Two", "Body"), Post(3, "Three", "Body"))
+        repository.remotePosts = threePosts
+        repository.posts.value = threePosts
+        repository.loadResult = { Result.success(Unit) }
+        return threePosts
+    }
+
+    private fun ListViewModel.items() = (uiState.value as ListUiState.Success).items
+
+    private fun List<Post>.asItems() = mapIndexed { index, post -> PostListItem(post, imagePosition = index) }
 }

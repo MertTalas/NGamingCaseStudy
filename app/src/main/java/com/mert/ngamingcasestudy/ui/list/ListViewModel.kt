@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -33,15 +34,17 @@ class ListViewModel @Inject constructor(
     private val restorePost: RestorePostUseCase,
 ) : ViewModel() {
 
+    private val posts = observePosts()
     private val loadStatus = MutableStateFlow(LoadStatus.LOADING)
+    private val imagePositions = MutableStateFlow<Map<Int, Int>>(emptyMap())
 
-    val uiState: StateFlow<ListUiState> = combine(loadStatus, observePosts()) { status, posts ->
+    val uiState: StateFlow<ListUiState> = combine(loadStatus, posts, imagePositions) { status, posts, imagePositions ->
         when (status) {
             LoadStatus.LOADING -> ListUiState.Loading
             LoadStatus.RETRYING -> ListUiState.Error(isRetrying = true)
             LoadStatus.FAILED -> ListUiState.Error(isRetrying = false)
-            LoadStatus.LOADED -> ListUiState.Success(posts, isRefreshing = false)
-            LoadStatus.REFRESHING -> ListUiState.Success(posts, isRefreshing = true)
+            LoadStatus.LOADED -> ListUiState.Success(posts.toItems(imagePositions), isRefreshing = false)
+            LoadStatus.REFRESHING -> ListUiState.Success(posts.toItems(imagePositions), isRefreshing = true)
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), ListUiState.Loading)
 
@@ -58,7 +61,9 @@ class ListViewModel @Inject constructor(
         if (loadStatus.value != LoadStatus.FAILED) return
         viewModelScope.launch {
             loadStatus.value = LoadStatus.RETRYING
-            loadStatus.value = withMinimumFeedback { loadPosts() }.toLoadStatus()
+            loadStatus.value = withMinimumFeedback { loadPosts() }
+                .onSuccess { rememberImagePositions() }
+                .toLoadStatus()
         }
     }
 
@@ -66,7 +71,7 @@ class ListViewModel @Inject constructor(
         if (loadStatus.value != LoadStatus.LOADED) return
         viewModelScope.launch {
             loadStatus.value = LoadStatus.REFRESHING
-            val result = withMinimumFeedback { refreshPosts() }
+            val result = withMinimumFeedback { refreshPosts() }.onSuccess { rememberImagePositions() }
             loadStatus.value = LoadStatus.LOADED
             if (result.isFailure) _events.trySend(ListEvent.ShowRefreshError)
         }
@@ -85,8 +90,18 @@ class ListViewModel @Inject constructor(
     private fun load() {
         viewModelScope.launch {
             loadStatus.value = LoadStatus.LOADING
-            loadStatus.value = loadPosts().toLoadStatus()
+            loadStatus.value = loadPosts()
+                .onSuccess { rememberImagePositions() }
+                .toLoadStatus()
         }
+    }
+
+    private suspend fun rememberImagePositions() {
+        imagePositions.value = posts.first().withIndex().associate { (index, post) -> post.id to index }
+    }
+
+    private fun List<Post>.toItems(imagePositions: Map<Int, Int>) = mapIndexed { index, post ->
+        PostListItem(post, imagePosition = imagePositions[post.id] ?: index)
     }
 
     private suspend fun withMinimumFeedback(block: suspend () -> Result<Unit>): Result<Unit> = coroutineScope {

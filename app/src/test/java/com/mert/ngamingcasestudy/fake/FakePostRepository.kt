@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 class FakePostRepository(
-    private val remotePosts: List<Post> = emptyList(),
+    var remotePosts: List<Post> = emptyList(),
     var loadResult: () -> Result<Unit> = { Result.success(Unit) },
 ) : PostRepository {
 
@@ -44,5 +44,9 @@ class FakePostRepository(
         return DeletedPost(post, index)
     }
 
-    override fun restorePost(deletedPost: DeletedPost) = Unit
+    override fun restorePost(deletedPost: DeletedPost) {
+        posts.update { list ->
+            list.toMutableList().apply { add(deletedPost.index.coerceAtMost(size), deletedPost.post) }
+        }
+    }
 }

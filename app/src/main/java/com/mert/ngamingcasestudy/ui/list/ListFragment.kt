@@ -6,11 +6,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.snackbar.Snackbar
 import com.mert.ngamingcasestudy.R
 import com.mert.ngamingcasestudy.databinding.FragmentListBinding
-import com.mert.ngamingcasestudy.domain.model.Post
 import com.mert.ngamingcasestudy.ui.common.BaseFragment
 import com.mert.ngamingcasestudy.ui.common.applySystemBarInsetsAsPadding
 import com.mert.ngamingcasestudy.ui.common.showProgress
@@ -56,6 +57,14 @@ class ListFragment : BaseFragment<FragmentListBinding>(
             }
         )
         ItemTouchHelper(PostSwipeCallback(onPostSwiped = viewModel::onPostDeleted)).attachToRecyclerView(this)
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                val layoutManager = layoutManager as LinearLayoutManager
+                if (positionStart <= layoutManager.findFirstCompletelyVisibleItemPosition()) {
+                    scrollToPosition(positionStart)
+                }
+            }
+        })
         applySystemBarInsetsAsPadding(bottom = true)
     }
 
@@ -69,7 +78,7 @@ class ListFragment : BaseFragment<FragmentListBinding>(
         loadingSkeleton.isVisible = state is ListUiState.Loading
         errorGroup.isVisible = state is ListUiState.Error
         swipeRefresh.isVisible = state is ListUiState.Success
-        emptyGroup.isVisible = state is ListUiState.Success && state.posts.isEmpty()
+        emptyGroup.isVisible = state is ListUiState.Success && state.items.isEmpty()
         when (state) {
             is ListUiState.Success -> renderSuccess(state, adapter)
             is ListUiState.Error -> retryButton.showProgress(state.isRetrying, R.drawable.ic_refresh)
@@ -78,9 +87,9 @@ class ListFragment : BaseFragment<FragmentListBinding>(
     }
 
     private fun renderSuccess(state: ListUiState.Success, adapter: PostAdapter) = with(binding) {
-        adapter.submitList(state.posts)
-        swipeRefresh.isRefreshing = state.isRefreshing && state.posts.isNotEmpty()
-        reloadButton.showProgress(state.isRefreshing && state.posts.isEmpty(), R.drawable.ic_refresh)
+        adapter.submitList(state.items)
+        swipeRefresh.isRefreshing = state.isRefreshing && state.items.isNotEmpty()
+        reloadButton.showProgress(state.isRefreshing && state.items.isEmpty(), R.drawable.ic_refresh)
     }
 
     private fun handleEvent(event: ListEvent) = when (event) {
@@ -98,9 +107,9 @@ class ListFragment : BaseFragment<FragmentListBinding>(
             .show()
     }
 
-    private fun openDetail(post: Post, imagePosition: Int) {
+    private fun openDetail(item: PostListItem) {
         val navController = findNavController()
         if (navController.currentDestination?.id != R.id.listFragment) return
-        navController.navigate(ListFragmentDirections.actionListToDetail(post.id, imagePosition))
+        navController.navigate(ListFragmentDirections.actionListToDetail(item.post.id, item.imagePosition))
     }
 }
