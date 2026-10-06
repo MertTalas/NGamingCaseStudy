@@ -10,6 +10,8 @@ import com.mert.ngamingcasestudy.domain.usecase.ObservePostsUseCase
 import com.mert.ngamingcasestudy.domain.usecase.RestorePostUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class ListViewModel @Inject constructor(
@@ -33,7 +36,8 @@ class ListViewModel @Inject constructor(
     val uiState: StateFlow<ListUiState> = combine(loadStatus, observePosts()) { status, posts ->
         when (status) {
             LoadStatus.LOADING -> ListUiState.Loading
-            LoadStatus.FAILED -> ListUiState.Error
+            LoadStatus.RETRYING -> ListUiState.Error(isRetrying = true)
+            LoadStatus.FAILED -> ListUiState.Error(isRetrying = false)
             LoadStatus.LOADED -> ListUiState.Success(posts)
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), ListUiState.Loading)
@@ -47,7 +51,13 @@ class ListViewModel @Inject constructor(
         load()
     }
 
-    fun onRetry() = load()
+    fun onRetry() {
+        if (loadStatus.value != LoadStatus.FAILED) return
+        viewModelScope.launch {
+            loadStatus.value = LoadStatus.RETRYING
+            loadStatus.value = retryLoad().toLoadStatus()
+        }
+    }
 
     fun onPostDeleted(post: Post) {
         lastDeletedPost = deletePost(post.id) ?: return
@@ -62,11 +72,21 @@ class ListViewModel @Inject constructor(
     private fun load() {
         viewModelScope.launch {
             loadStatus.value = LoadStatus.LOADING
-            loadStatus.value = if (loadPosts().isSuccess) LoadStatus.LOADED else LoadStatus.FAILED
+            loadStatus.value = loadPosts().toLoadStatus()
         }
     }
 
+    private suspend fun retryLoad(): Result<Unit> = coroutineScope {
+        val minimumFeedback = launch { delay(MIN_RETRY_FEEDBACK_MILLIS.milliseconds) }
+        loadPosts().also { result ->
+            if (result.isSuccess) minimumFeedback.cancel() else minimumFeedback.join()
+        }
+    }
+
+    private fun Result<Unit>.toLoadStatus() = if (isSuccess) LoadStatus.LOADED else LoadStatus.FAILED
+
     private companion object {
         const val STOP_TIMEOUT_MILLIS = 5_000L
+        const val MIN_RETRY_FEEDBACK_MILLIS = 600L
     }
 }

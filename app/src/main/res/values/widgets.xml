@@ -29,4 +29,10 @@
         <item name="iconPadding">@dimen/button_icon_padding</item>
         <item name="iconSize">@dimen/button_icon_size</item>
     </style>
+
+    <style name="Widget.NGaming.ButtonProgress" parent="Widget.Material3.CircularProgressIndicator.ExtraSmall">
+        <item name="indicatorColor">@color/on_primary</item>
+        <item name="indicatorSize">@dimen/button_icon_size</item>
+        <item name="trackThickness">@dimen/button_progress_thickness</item>
+    </style>
 </resources>

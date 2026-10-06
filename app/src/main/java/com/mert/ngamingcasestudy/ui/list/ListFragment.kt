@@ -1,12 +1,16 @@
 package com.mert.ngamingcasestudy.ui.list
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.android.material.progressindicator.CircularProgressIndicatorSpec
+import com.google.android.material.progressindicator.IndeterminateDrawable
 import com.google.android.material.snackbar.Snackbar
 import com.mert.ngamingcasestudy.R
 import com.mert.ngamingcasestudy.databinding.FragmentListBinding
@@ -34,7 +38,8 @@ class ListFragment : BaseFragment<FragmentListBinding>(
         setupList(adapter)
         binding.retryButton.setOnClickListener { viewModel.onRetry() }
 
-        viewModel.uiState.collectWithLifecycle { render(it, adapter) }
+        val retryProgress = buttonProgressDrawable()
+        viewModel.uiState.collectWithLifecycle { render(it, adapter, retryProgress) }
         viewModel.events.collectWithLifecycle { handleEvent(it) }
     }
 
@@ -56,12 +61,26 @@ class ListFragment : BaseFragment<FragmentListBinding>(
         applySystemBarInsetsAsPadding(bottom = true)
     }
 
-    private fun render(state: ListUiState, adapter: PostAdapter) = with(binding) {
+    private fun buttonProgressDrawable(): Drawable {
+        val spec = CircularProgressIndicatorSpec(requireContext(), null, 0, R.style.Widget_NGaming_ButtonProgress)
+        return IndeterminateDrawable.createCircularDrawable(requireContext(), spec)
+    }
+
+    private fun render(state: ListUiState, adapter: PostAdapter, retryProgress: Drawable) = with(binding) {
         loadingSkeleton.isVisible = state is ListUiState.Loading
         errorGroup.isVisible = state is ListUiState.Error
         postList.isVisible = state is ListUiState.Success
         emptyText.isVisible = state is ListUiState.Success && state.posts.isEmpty()
-        if (state is ListUiState.Success) adapter.submitList(state.posts)
+        when (state) {
+            is ListUiState.Success -> adapter.submitList(state.posts)
+            is ListUiState.Error -> renderRetry(state.isRetrying, retryProgress)
+            ListUiState.Loading -> Unit
+        }
+    }
+
+    private fun renderRetry(isRetrying: Boolean, retryProgress: Drawable) = with(binding.retryButton) {
+        icon = if (isRetrying) retryProgress else AppCompatResources.getDrawable(context, R.drawable.ic_refresh)
+        isClickable = !isRetrying
     }
 
     private fun handleEvent(event: ListEvent) = when (event) {
