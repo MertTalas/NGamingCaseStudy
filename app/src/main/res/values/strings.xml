@@ -9,4 +9,13 @@
     <string name="post_delete">Delete</string>
     <string name="post_deleted">Post deleted</string>
     <string name="post_undo">Undo</string>
+
+    <string name="detail_title">Edit post</string>
+    <string name="detail_back">Back</string>
+    <string name="detail_post_number">Post #%1$d</string>
+    <string name="detail_hint">Tap a field to edit</string>
+    <string name="detail_title_label">Title</string>
+    <string name="detail_body_label">Body</string>
+    <string name="detail_save">Save</string>
+    <string name="detail_not_found">This post is no longer available.</string>
 </resources>

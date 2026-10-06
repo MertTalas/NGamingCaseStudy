@@ -16,9 +16,10 @@ import coil3.transform.CircleCropTransformation
 import com.mert.ngamingcasestudy.R
 import com.mert.ngamingcasestudy.databinding.ItemPostBinding
 import com.mert.ngamingcasestudy.domain.model.Post
+import com.mert.ngamingcasestudy.ui.common.postImageUrl
 
 class PostAdapter(
-    private val onPostClick: (Post) -> Unit,
+    private val onPostClick: (Post, Int) -> Unit,
     private val onPostDelete: (Post) -> Unit,
 ) : ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffCallback) {
 
@@ -33,7 +34,7 @@ class PostAdapter(
 
     class PostViewHolder(
         private val binding: ItemPostBinding,
-        onPostClick: (Post) -> Unit,
+        onPostClick: (Post, Int) -> Unit,
         onPostDelete: (Post) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -45,7 +46,11 @@ class PostAdapter(
         val deleteBackground: View get() = binding.deleteBackground
 
         init {
-            binding.foreground.setOnClickListener { boundPost?.let(onPostClick) }
+            binding.foreground.setOnClickListener {
+                val post = boundPost ?: return@setOnClickListener
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) onPostClick(post, position)
+            }
             ViewCompat.addAccessibilityAction(
                 binding.foreground,
                 binding.root.context.getString(R.string.post_delete),
