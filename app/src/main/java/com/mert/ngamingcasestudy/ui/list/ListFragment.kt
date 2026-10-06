@@ -13,6 +13,7 @@ import com.mert.ngamingcasestudy.databinding.FragmentListBinding
 import com.mert.ngamingcasestudy.domain.model.Post
 import com.mert.ngamingcasestudy.ui.common.BaseFragment
 import com.mert.ngamingcasestudy.ui.common.applySystemBarInsetsAsPadding
+import com.mert.ngamingcasestudy.ui.common.showProgress
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,7 +33,9 @@ class ListFragment : BaseFragment<FragmentListBinding>(
 
         setupTopBar()
         setupList(adapter)
+        setupRefresh()
         binding.retryButton.setOnClickListener { viewModel.onRetry() }
+        binding.reloadButton.setOnClickListener { viewModel.onRefresh() }
 
         viewModel.uiState.collectWithLifecycle { render(it, adapter) }
         viewModel.events.collectWithLifecycle { handleEvent(it) }
@@ -56,16 +59,37 @@ class ListFragment : BaseFragment<FragmentListBinding>(
         applySystemBarInsetsAsPadding(bottom = true)
     }
 
+    private fun setupRefresh() = with(binding.swipeRefresh) {
+        setColorSchemeResources(R.color.on_primary)
+        setProgressBackgroundColorSchemeResource(R.color.primary)
+        setOnRefreshListener { viewModel.onRefresh() }
+    }
+
     private fun render(state: ListUiState, adapter: PostAdapter) = with(binding) {
         loadingSkeleton.isVisible = state is ListUiState.Loading
         errorGroup.isVisible = state is ListUiState.Error
-        postList.isVisible = state is ListUiState.Success
-        emptyText.isVisible = state is ListUiState.Success && state.posts.isEmpty()
-        if (state is ListUiState.Success) adapter.submitList(state.posts)
+        swipeRefresh.isVisible = state is ListUiState.Success
+        emptyGroup.isVisible = state is ListUiState.Success && state.posts.isEmpty()
+        when (state) {
+            is ListUiState.Success -> renderSuccess(state, adapter)
+            is ListUiState.Error -> retryButton.showProgress(state.isRetrying, R.drawable.ic_refresh)
+            ListUiState.Loading -> Unit
+        }
+    }
+
+    private fun renderSuccess(state: ListUiState.Success, adapter: PostAdapter) = with(binding) {
+        adapter.submitList(state.posts)
+        swipeRefresh.isRefreshing = state.isRefreshing && state.posts.isNotEmpty()
+        reloadButton.showProgress(state.isRefreshing && state.posts.isEmpty(), R.drawable.ic_refresh)
     }
 
     private fun handleEvent(event: ListEvent) = when (event) {
         ListEvent.ShowUndoDelete -> showUndoDelete()
+        ListEvent.ShowRefreshError -> showRefreshError()
+    }
+
+    private fun showRefreshError() {
+        Snackbar.make(binding.root, R.string.list_refresh_error, Snackbar.LENGTH_LONG).show()
     }
 
     private fun showUndoDelete() {

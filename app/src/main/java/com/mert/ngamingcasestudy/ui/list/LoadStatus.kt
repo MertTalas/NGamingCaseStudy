@@ -1,3 +1,3 @@
 package com.mert.ngamingcasestudy.ui.list
 
-enum class LoadStatus { LOADING, LOADED, FAILED }
+enum class LoadStatus { LOADING, RETRYING, LOADED, REFRESHING, FAILED }

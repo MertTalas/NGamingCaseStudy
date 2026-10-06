@@ -16,13 +16,19 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/post_list"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_post" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/post_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_post" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <com.mert.ngamingcasestudy.ui.common.ShimmerFrameLayout
             android:id="@+id/loading_skeleton"
@@ -39,37 +45,56 @@
 
         <LinearLayout
             android:id="@+id/error_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="@dimen/spacing_md"
-            android:visibility="gone">
+            style="@style/Widget.NGaming.StateGroup"
+            android:paddingHorizontal="@dimen/spacing_xl">
+
+            <ImageView
+                style="@style/Widget.NGaming.StateIcon"
+                android:src="@drawable/ic_cloud_off" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/list_error"
-                android:textAppearance="?attr/textAppearanceBodyLarge"
-                android:textColor="?attr/colorOnBackground" />
+                style="@style/Widget.NGaming.StateTitle"
+                android:text="@string/list_error_title" />
+
+            <TextView
+                style="@style/Widget.NGaming.StateMessage"
+                android:text="@string/list_error_message" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/retry_button"
+                style="@style/Widget.NGaming.Button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_md"
-                android:text="@string/list_retry" />
+                android:layout_marginTop="@dimen/state_action_spacing"
+                android:paddingHorizontal="@dimen/spacing_lg"
+                android:text="@string/list_retry"
+                app:icon="@drawable/ic_refresh" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/empty_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/list_empty"
-            android:textAppearance="?attr/textAppearanceBodyLarge"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:visibility="gone" />
+        <LinearLayout
+            android:id="@+id/empty_group"
+            style="@style/Widget.NGaming.StateGroup"
+            android:paddingHorizontal="@dimen/spacing_xl">
+
+            <ImageView
+                style="@style/Widget.NGaming.StateIcon"
+                android:src="@drawable/ic_inbox" />
+
+            <TextView
+                style="@style/Widget.NGaming.StateTitle"
+                android:text="@string/list_empty_title" />
+
+            <TextView
+                style="@style/Widget.NGaming.StateMessage"
+                android:text="@string/list_empty_message" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/reload_button"
+                style="@style/Widget.NGaming.Button.Outlined"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/state_action_spacing"
+                android:paddingHorizontal="@dimen/spacing_lg"
+                android:text="@string/list_reload"
+                app:icon="@drawable/ic_refresh" />
+        </LinearLayout>
     </FrameLayout>
 </LinearLayout>

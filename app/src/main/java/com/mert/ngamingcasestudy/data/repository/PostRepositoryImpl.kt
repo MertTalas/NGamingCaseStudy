@@ -37,18 +37,21 @@ class PostRepositoryImpl @Inject constructor(
         _posts.map { posts -> posts.find { it.id == id } }.distinctUntilChanged()
 
     override suspend fun loadPosts(): Result<Unit> = loadMutex.withLock {
-        if (isLoaded) return Result.success(Unit)
-        try {
-            _posts.value = withContext(ioDispatcher) {
-                service.getPosts().map { it.toDomain() }
-            }
-            isLoaded = true
-            Result.success(Unit)
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            Result.failure(e)
+        if (isLoaded) Result.success(Unit) else fetchPosts()
+    }
+
+    override suspend fun refreshPosts(): Result<Unit> = loadMutex.withLock { fetchPosts() }
+
+    private suspend fun fetchPosts(): Result<Unit> = try {
+        _posts.value = withContext(ioDispatcher) {
+            service.getPosts().map { it.toDomain() }
         }
+        isLoaded = true
+        Result.success(Unit)
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        Result.failure(e)
     }
 
     override fun updatePost(id: Int, title: String, body: String) {

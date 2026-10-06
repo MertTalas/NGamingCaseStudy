@@ -4,6 +4,6 @@ import com.mert.ngamingcasestudy.domain.model.Post
 
 sealed interface ListUiState {
     data object Loading : ListUiState
-    data object Error : ListUiState
-    data class Success(val posts: List<Post>) : ListUiState
+    data class Error(val isRetrying: Boolean) : ListUiState
+    data class Success(val posts: List<Post>, val isRefreshing: Boolean) : ListUiState
 }

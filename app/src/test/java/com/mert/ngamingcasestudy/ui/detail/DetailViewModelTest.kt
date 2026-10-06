@@ -1,18 +1,13 @@
 package com.mert.ngamingcasestudy.ui.detail
 
 import androidx.lifecycle.SavedStateHandle
-import com.mert.ngamingcasestudy.domain.model.DeletedPost
 import com.mert.ngamingcasestudy.domain.model.Post
-import com.mert.ngamingcasestudy.domain.repository.PostRepository
+import com.mert.ngamingcasestudy.fake.FakePostRepository
 import com.mert.ngamingcasestudy.domain.usecase.ObservePostUseCase
 import com.mert.ngamingcasestudy.domain.usecase.UpdatePostUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -90,19 +85,4 @@ class DetailViewModelTest {
         assertEquals(DetailUiState.NotFound, viewModel(postId = 99).uiState.value)
     }
 
-    private class FakePostRepository(initial: List<Post>) : PostRepository {
-        override val posts = MutableStateFlow(initial)
-
-        override fun observePost(id: Int): Flow<Post?> = posts.map { list -> list.find { it.id == id } }
-
-        override suspend fun loadPosts() = Result.success(Unit)
-
-        override fun updatePost(id: Int, title: String, body: String) {
-            posts.update { list -> list.map { if (it.id == id) it.copy(title = title, body = body) else it } }
-        }
-
-        override fun deletePost(id: Int): DeletedPost? = null
-
-        override fun restorePost(deletedPost: DeletedPost) = Unit
-    }
 }
