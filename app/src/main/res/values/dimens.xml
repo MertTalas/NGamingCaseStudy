@@ -25,10 +25,11 @@
     <dimen name="button_icon_size">18dp</dimen>
     <dimen name="button_icon_padding">8dp</dimen>
     <dimen name="button_progress_thickness">2dp</dimen>
+    <dimen name="button_stroke_width">1.5dp</dimen>
 
-    <dimen name="error_icon_container_size">96dp</dimen>
-    <dimen name="error_icon_padding">24dp</dimen>
-    <dimen name="error_action_spacing">40dp</dimen>
+    <dimen name="state_icon_container_size">96dp</dimen>
+    <dimen name="state_icon_padding">24dp</dimen>
+    <dimen name="state_action_spacing">40dp</dimen>
 
     <dimen name="swipe_action_width">128dp</dimen>
     <dimen name="swipe_action_icon_size">24dp</dimen>

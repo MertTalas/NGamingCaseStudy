@@ -6,7 +6,10 @@
     <string name="list_error_message">We couldn\'t load the posts. Check your connection and try again.</string>
     <string name="list_retry">Try again</string>
     <string name="list_loading">Loading posts</string>
-    <string name="list_empty">No posts yet.</string>
+    <string name="list_empty_title">No posts left</string>
+    <string name="list_empty_message">You have deleted every post. Reload to fetch them again.</string>
+    <string name="list_reload">Reload</string>
+    <string name="list_refresh_error">Posts could not be refreshed.</string>
     <string name="post_delete">Delete</string>
     <string name="post_deleted">Post deleted</string>
     <string name="post_undo">Undo</string>

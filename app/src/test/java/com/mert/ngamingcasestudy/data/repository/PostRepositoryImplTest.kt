@@ -71,6 +71,33 @@ class PostRepositoryImplTest {
     }
 
     @Test
+    fun `refreshPosts fetches again and replaces local changes`() = runTest {
+        val service = FakePostService { dtos }
+        val repository = repository(service)
+        repository.loadPosts()
+        repository.deletePost(1)
+
+        val result = repository.refreshPosts()
+
+        assertTrue(result.isSuccess)
+        assertEquals(2, service.callCount)
+        assertEquals(listOf(1, 2), repository.posts.value.map { it.id })
+    }
+
+    @Test
+    fun `refreshPosts keeps current posts when the request fails`() = runTest {
+        var shouldFail = false
+        val service = FakePostService { if (shouldFail) throw IOException() else dtos }
+        val repository = repository(service)
+        repository.loadPosts()
+        repository.deletePost(1)
+        shouldFail = true
+
+        assertTrue(repository.refreshPosts().isFailure)
+        assertEquals(listOf(2), repository.posts.value.map { it.id })
+    }
+
+    @Test
     fun `updatePost changes only the matching post`() = runTest {
         val repository = repository(FakePostService { dtos })
         repository.loadPosts()

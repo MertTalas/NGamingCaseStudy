@@ -12,6 +12,8 @@ interface PostRepository {
 
     suspend fun loadPosts(): Result<Unit>
 
+    suspend fun refreshPosts(): Result<Unit>
+
     fun updatePost(id: Int, title: String, body: String)
 
     fun deletePost(id: Int): DeletedPost?

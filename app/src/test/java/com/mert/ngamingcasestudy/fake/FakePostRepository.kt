@@ -9,13 +9,16 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 class FakePostRepository(
-    initial: List<Post> = emptyList(),
+    private val remotePosts: List<Post> = emptyList(),
     var loadResult: () -> Result<Unit> = { Result.success(Unit) },
 ) : PostRepository {
 
-    override val posts = MutableStateFlow(initial)
+    override val posts = MutableStateFlow(remotePosts)
 
     var loadCount = 0
+        private set
+
+    var refreshCount = 0
         private set
 
     override fun observePost(id: Int): Flow<Post?> = posts.map { list -> list.find { it.id == id } }
@@ -25,11 +28,21 @@ class FakePostRepository(
         return loadResult()
     }
 
+    override suspend fun refreshPosts(): Result<Unit> {
+        refreshCount++
+        return loadResult().onSuccess { posts.value = remotePosts }
+    }
+
     override fun updatePost(id: Int, title: String, body: String) {
         posts.update { list -> list.map { if (it.id == id) it.copy(title = title, body = body) else it } }
     }
 
-    override fun deletePost(id: Int): DeletedPost? = null
+    override fun deletePost(id: Int): DeletedPost? {
+        val index = posts.value.indexOfFirst { it.id == id }
+        val post = posts.value.getOrNull(index) ?: return null
+        posts.update { it - post }
+        return DeletedPost(post, index)
+    }
 
     override fun restorePost(deletedPost: DeletedPost) = Unit
 }

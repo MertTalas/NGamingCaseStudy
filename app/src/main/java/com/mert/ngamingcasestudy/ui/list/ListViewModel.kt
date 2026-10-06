@@ -7,6 +7,7 @@ import com.mert.ngamingcasestudy.domain.model.Post
 import com.mert.ngamingcasestudy.domain.usecase.DeletePostUseCase
 import com.mert.ngamingcasestudy.domain.usecase.LoadPostsUseCase
 import com.mert.ngamingcasestudy.domain.usecase.ObservePostsUseCase
+import com.mert.ngamingcasestudy.domain.usecase.RefreshPostsUseCase
 import com.mert.ngamingcasestudy.domain.usecase.RestorePostUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -27,6 +28,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class ListViewModel @Inject constructor(
     observePosts: ObservePostsUseCase,
     private val loadPosts: LoadPostsUseCase,
+    private val refreshPosts: RefreshPostsUseCase,
     private val deletePost: DeletePostUseCase,
     private val restorePost: RestorePostUseCase,
 ) : ViewModel() {
@@ -38,7 +40,8 @@ class ListViewModel @Inject constructor(
             LoadStatus.LOADING -> ListUiState.Loading
             LoadStatus.RETRYING -> ListUiState.Error(isRetrying = true)
             LoadStatus.FAILED -> ListUiState.Error(isRetrying = false)
-            LoadStatus.LOADED -> ListUiState.Success(posts)
+            LoadStatus.LOADED -> ListUiState.Success(posts, isRefreshing = false)
+            LoadStatus.REFRESHING -> ListUiState.Success(posts, isRefreshing = true)
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), ListUiState.Loading)
 
@@ -55,7 +58,17 @@ class ListViewModel @Inject constructor(
         if (loadStatus.value != LoadStatus.FAILED) return
         viewModelScope.launch {
             loadStatus.value = LoadStatus.RETRYING
-            loadStatus.value = retryLoad().toLoadStatus()
+            loadStatus.value = withMinimumFeedback { loadPosts() }.toLoadStatus()
+        }
+    }
+
+    fun onRefresh() {
+        if (loadStatus.value != LoadStatus.LOADED) return
+        viewModelScope.launch {
+            loadStatus.value = LoadStatus.REFRESHING
+            val result = withMinimumFeedback { refreshPosts() }
+            loadStatus.value = LoadStatus.LOADED
+            if (result.isFailure) _events.trySend(ListEvent.ShowRefreshError)
         }
     }
 
@@ -76,9 +89,9 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    private suspend fun retryLoad(): Result<Unit> = coroutineScope {
-        val minimumFeedback = launch { delay(MIN_RETRY_FEEDBACK_MILLIS.milliseconds) }
-        loadPosts().also { result ->
+    private suspend fun withMinimumFeedback(block: suspend () -> Result<Unit>): Result<Unit> = coroutineScope {
+        val minimumFeedback = launch { delay(MIN_FEEDBACK_MILLIS.milliseconds) }
+        block().also { result ->
             if (result.isSuccess) minimumFeedback.cancel() else minimumFeedback.join()
         }
     }
@@ -87,6 +100,6 @@ class ListViewModel @Inject constructor(
 
     private companion object {
         const val STOP_TIMEOUT_MILLIS = 5_000L
-        const val MIN_RETRY_FEEDBACK_MILLIS = 600L
+        const val MIN_FEEDBACK_MILLIS = 600L
     }
 }
